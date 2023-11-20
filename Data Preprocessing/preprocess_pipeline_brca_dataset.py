@@ -291,12 +291,3 @@ def Create_Pipeline():
         [("preprocess", preprocess), ("onehot", onehot)]
     )
     return preprocess_pipeline
-
-
-
-if __name__ == "__main__":
-    df = pd.read_csv(r"C:\Users\AlessandroKuz\Desktop\ITS\PW01 - Project Work\ULTIMATE WORK\BASE DATA\DATASET_COMPLETO_BRCA.csv")
-    pipeline = Create_Pipeline()
-    finished_df = pipeline.fit_transform(df)
-
-    finished_df.to_csv(r"C:\Users\AlessandroKuz\Desktop\ITS\PW01 - Project Work\ULTIMATE WORK\Clean data and scripts\BRCA_TRAIN_DF.csv", index=False)
