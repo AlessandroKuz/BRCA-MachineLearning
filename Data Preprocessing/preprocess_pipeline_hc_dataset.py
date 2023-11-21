@@ -74,11 +74,15 @@ def Process_Tresholds_Columns(df, column_name, sep, threshold):
                 continue
             if value in value_counts.index:
                 value_col_name = f"{column_name}_{value}"
+                if value_col_name not in df.columns:
+                    df[value_col_name] = 0
                 df.loc[index, value_col_name] = 1
             else:
                 other_col_name = (
                     f"{column_name}_ALTRO" if column_name != "AOP" else f"{column_name}_A"
                 )
+                if other_col_name not in df.columns:
+                    df[other_col_name] = 0
                 df.loc[index, other_col_name] = 1
 
     return df
@@ -119,9 +123,9 @@ def Preprocess_Dataset(df):
         "CLINPRED_PRED",
         "DOMAINS",
         "GNOMAD_EXOMES_NON_CANCER_NFE_AF",
-
-
-        "CLINVAR_ID"
+        "CLINVAR_ID",
+        "EXON",
+        "INTRON"
     ]
 
     df = rename_columns(
@@ -242,7 +246,6 @@ def Preprocess_Dataset(df):
     df["EXON/INTRON_POS"] = "0/0"
     df.loc[df["IS_EXON"] == 1, "EXON/INTRON_POS"] = df["EXON"]
     df.loc[df["IS_INTRON"] == 1, "EXON/INTRON_POS"] = df["INTRON"]
-    df.drop(columns=["EXON", "INTRON"], inplace=True)
     df["EXON/INTRON_POS"] = df["EXON/INTRON_POS"].astype("str")
 
     df["EXON/INTRON_CURR_POS"] = df["EXON/INTRON_POS"].apply(lambda x: x.split("/")[0])

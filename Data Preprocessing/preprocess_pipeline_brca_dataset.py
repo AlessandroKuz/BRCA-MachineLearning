@@ -118,7 +118,9 @@ def Preprocess_Dataset(df):
         "CLINPRED_PRED",
         "DOMAINS",
         "GNOMAD_EXOMES_NON_CANCER_NFE_AF",
-        "CLINVAR_ID"
+        "CLINVAR_ID",
+        "EXON",
+        "INTRON"
     ]
     bad_cols_cancer = df.columns[5:20]
     columns_to_drop.extend(bad_cols_cancer)
@@ -184,7 +186,7 @@ def Preprocess_Dataset(df):
 
     df = clean_columns(df, columns_to_clean)
 
-    # df = df[df["GENE_SYMBOL"].isin(["BRCA1", "BRCA2"])] 
+    df = df[df["GENE_SYMBOL"].isin(["BRCA1", "BRCA2"])] 
 
     df["GT_1"] = df["GT"].str.split("/").str[0]
     df["GT_2"] = df["GT"].str.split("/").str[1]
@@ -195,7 +197,6 @@ def Preprocess_Dataset(df):
     df["EXON/INTRON_POS"] = "0/0"
     df.loc[df["IS_EXON"] == 1, "EXON/INTRON_POS"] = df["EXON"]
     df.loc[df["IS_INTRON"] == 1, "EXON/INTRON_POS"] = df["INTRON"]
-    df.drop(columns=["EXON", "INTRON"], inplace=True)
     df["EXON/INTRON_POS"] = df["EXON/INTRON_POS"].astype("str")
 
     df["EXON/INTRON_CURR_POS"] = df["EXON/INTRON_POS"].apply(lambda x: x.split("/")[0])
