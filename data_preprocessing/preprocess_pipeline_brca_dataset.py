@@ -181,6 +181,8 @@ def Preprocess_Dataset(df):
         ("STORIA_FAMILIARE_POS_ALTRA_PATOLOGIA", 
          {"NO": "0", "ND": "0", "SI": "1", "AI": "1"}),
 
+        ("FAMILIARI", {"NO": "0", "ND": "0", "X": "1", "SI": "1"}),
+
         ("ETA_DIAGNOSI", {"-": "/", ",": "/", "N.D": "ND"}),
     ]
 
@@ -230,6 +232,7 @@ def Preprocess_Dataset(df):
     columns_to_convert = {
         "GT_1": int,
         "GT_2": int,
+        "FAMILIARI": int,
         "EXON/INTRON_CURR_POS": int,
         "ETA_DIAGNOSI_MIN": int,
         "ETA_DIAGNOSI_MAX": int,
