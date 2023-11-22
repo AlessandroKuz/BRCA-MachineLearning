@@ -125,7 +125,8 @@ def Preprocess_Dataset(df):
         "GNOMAD_EXOMES_NON_CANCER_NFE_AF",
         "CLINVAR_ID",
         "EXON",
-        "INTRON"
+        "INTRON",
+        "ETA"
     ]
 
     df = rename_columns(
@@ -250,12 +251,17 @@ def Preprocess_Dataset(df):
 
     df["EXON/INTRON_CURR_POS"] = df["EXON/INTRON_POS"].apply(lambda x: x.split("/")[0])
 
-    df["ANNO_NASCITA"] = "19" + df["DATA_NASCITA"].str[-2:]
+    df['ANNO_NASCITA'] = df["DATA_NASCITA"].str[-2:].astype(str)
+    df['ANNO_NASCITA'] = df['ANNO_NASCITA'].apply(lambda x: "19" + x if x[0] != "0" else "20" + x)
     df["ANNO_NASCITA"] = pd.to_numeric(df["ANNO_NASCITA"])
     df["ETA"] = df["ANNO"] - df["ANNO_NASCITA"]
 
     df["ETA_DIAGNOSI_MIN"] = df["ETA_DIAGNOSI"].str.split("/").str[0]
-    df["ETA_DIAGNOSI_MAX"] = df["ETA_DIAGNOSI"].str.split("/").str[-1]
+    df["ETA_DIAGNOSI_MAX"] = df["ETA_DIAGNOSI"].apply(lambda x: x.split("/")[-1] if x.split("/")[-1] != "ND" else None)
+    # Added 10 because it is the mean delta between exams
+    df["ETA_DIAGNOSI_MAX"] = df.apply(lambda row: row["ETA"] + 10 if pd.isnull(row["ETA_DIAGNOSI_MAX"]) else row["ETA_DIAGNOSI_MAX"], axis=1)
+    df["ETA_DIAGNOSI_MIN"] = df.apply(lambda row: row["ETA"] if row["ETA_DIAGNOSI_MIN"] == "ND" else row["ETA_DIAGNOSI_MIN"], axis=1)
+
     df["N_DIAGNOSI"] = df["ETA_DIAGNOSI"].str.count("/") + 1
 
     df.loc[
