@@ -69,7 +69,6 @@ class ExonIntronType(BaseEstimator, TransformerMixin):
         X["EXON_INTRON_N"] = X["EXON_INTRON_N"].apply(lambda x: str(x).split("/")[0])
         return X
 
-
 class AlleleFreq(BaseEstimator, TransformerMixin): 
     def __init__(self, af_1000, af_gnomad, variant_occurrences):
         self.af_1000 = af_1000
