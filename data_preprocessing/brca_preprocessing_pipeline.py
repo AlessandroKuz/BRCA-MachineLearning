@@ -151,11 +151,12 @@ def brca_preprocessing_pipeline(df):
         ('variant_type', VariantType('VARIANT_TYPE')),
         ('drop_columns', DropColumns(['ANNO', 'MSP', 'A.O.P.', 'ETA ALLA DIAGNOSI', 'DUTTALE', 'LOBULARE', 'BILATERALE', 
                                     'TRIPLO NEG', 'INFILTRANTE', 'DUTTALE IN SITU', 'MICROPAPILLARE', 'MUCINOSO', 'IN SITU', 
-                                    'SIEROSO', 'ENDOMETRIOIDE', 'ALTRO', 'N/D', 'ALTRO ISTOTIPO', 'ALTRO TUMORE', 'POS', 'GT', 
+                                    'SIEROSO', 'ENDOMETRIOIDE', 'ALTRO', 'N/D', 'ALTRO ISTOTIPO', 'ALTRO TUMORE', 'POS', 
                                     'STORIA FAMILIARE POS \r\n\r\nPER K MAMMARIO/ OVARICO', 'CAMPIONE', 'BUILT','INTRON',
                                     'STORIA FAMILIARE POS PER PATOLOGIA \r\n\r\nONCOLOGICA DIVERSA', 'FAMILIARI', 'CHROM', 
                                     'Data Firma Referto Formato Corto', 'Data di nascita formato breve', 'PANNELLO', 'EXON',
-                                    'GENE_ENST', 'SAMPLE', 'PUBMED', '1000GP3_EUR_AF', 'GNOMAD_EXOMES_NON_CANCER_NFE_AF'])),
+                                    'GENE_ENST', 'SAMPLE', 'PUBMED', '1000GP3_EUR_AF', 'GNOMAD_EXOMES_NON_CANCER_NFE_AF',
+                                    'SESSO', 'GT'])),
     ])
 
     return brca_pipeline
