@@ -134,7 +134,7 @@ class RenameColumns(BaseEstimator, TransformerMixin):
         X = X.rename(columns=dict(self.columns))
         return X
 
-def brca_preprocessing_pipeline(df):
+def brca_preprocessing_pipeline():
     brca_pipeline = Pipeline([
         ('map_column', MapColumn('LABEL', {'NEG': 0, 'POS': 1, 'VUS': 2})),
         ('fill_na', FillNA('FAMILIARI', 0)),
