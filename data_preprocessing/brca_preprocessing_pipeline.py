@@ -66,6 +66,7 @@ class ExonIntronType(BaseEstimator, TransformerMixin):
         X.loc[X[self.exon].isna() & X[self.intron].isna(), 'EXON_INTRON_TYPE'] = 'NA'
         X.loc[X[self.exon].notna(), 'EXON_INTRON_N'] = X[self.exon]
         X.loc[X[self.intron].notna(), 'EXON_INTRON_N'] = X[self.intron]
+        X['EXON_INTRON_N'].fillna(0, inplace=True)
         X["EXON_INTRON_N"] = X["EXON_INTRON_N"].apply(lambda x: str(x).split("/")[0])
         return X
 
@@ -156,6 +157,7 @@ def brca_preprocessing_pipeline():
                                     'Data Firma Referto Formato Corto', 'Data di nascita formato breve', 'PANNELLO', 'EXON',
                                     'GENE_ENST', 'SAMPLE', 'PUBMED', '1000GP3_EUR_AF', 'GNOMAD_EXOMES_NON_CANCER_NFE_AF',
                                     'SESSO', 'GT'])),
+        ('fillna_with_0', FillNA(['CLINVAR_ID_COUNT', 'DOMAINS_COUNT'], 0)),
     ])
 
     return brca_pipeline
