@@ -1,4 +1,4 @@
-from brca_preprocessing_pipeline import brca_preprocessing_pipeline
+from data_preprocessing.brca_preprocessing_pipeline import brca_preprocessing_pipeline
 from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 from sklearn.impute import KNNImputer, SimpleImputer
 from sklearn.compose import make_column_transformer
