@@ -74,10 +74,10 @@ def get_brca_pipeline(cols_to_encode:list, cols_to_scale:list, imputation:bool=F
     outputs:
         preprocess_pipeline: sklearn pipeline object
     """
-    cols_to_impute_num, cols_to_impute_cat = cols_to_impute
     onehot = make_onehot(cols_to_encode)
     scale = make_scaler(cols_to_scale)
     if imputation:
+        cols_to_impute_num, cols_to_impute_cat = cols_to_impute
         preprocess_pipeline = Pipeline(
             [
             ("preprocessing", brca_preprocessing_pipeline()),
