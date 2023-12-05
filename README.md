@@ -5,7 +5,6 @@
 The project aims to merge GMO(Report table), HC(Excel HC panel), VCF and VEP(Variant Effect Predictor) files and GMO BRCA(Excel BRCA) VCF and VEP files to classify Variants of Unknown Significance (VUS) using Machine Learning models (Random Forest and Support Vector Machine). The ultimate goal is to classify VUS as POS (Positive) or NEG (Negative) based on the available data.
 
 ## Link Slides on Google Drive
-They are working in progress, they will be available soon completed
 (https://docs.google.com/presentation/d/16vIr4YETAOycf6kZIynbmBwbPGMWkvEMFpeLpVITlrU/edit?usp=sharing)
 
 ## Process Documentation
@@ -55,7 +54,7 @@ Using regex, we cleaned the data in the columns by removing the special characte
 
 #### Step 3 - Merge with VCF Files
 
-With standardized data, the 3 files(For both hc and brca) were merged based on patient code, creating two single semifinal files.
+With standardized data, the 3 files(For both HC and BRCA) were merged based on patient code, creating two single semifinal files.
 
 #### Step 4 - Merge with VEP Files
 
@@ -68,61 +67,41 @@ This repository contains code for a data preprocessing pipeline and feature engi
 ##### Libraries Used
 - pandas
 - numpy
-- scikit-learn (`sklearn`)
-  - `OneHotEncoder`
-  - `FunctionTransformer`
-  - `make_column_transformer`
-  - `Pipeline`
-
-##### Steps Implemented
-
-1. **Data Preprocessing Functions:**
-    - `find_empty_columns`: Identifies empty columns in the dataset.
-    - `drop_columns`: Drops specified columns from the DataFrame.
-    - `to_uppercase`: Converts string values in a DataFrame to uppercase.
-    - `clean_columns`: Cleans specific columns based on predefined replacements.
-    - `rename_columns`: Renames columns as per the provided mapping.
-    - `convert_column_types`: Converts specified columns to defined data types.
-    - `drop_NaN_rows`: Drops rows with NaN values in specified columns.
-    - `fill_NaN_rows`: Fills NaN values in specified columns with provided values.
-
-2. **Data Preprocessing Function - `Preprocess_Dataset`:**
-    - Implements a series of data cleaning steps, including dropping unnecessary columns, renaming columns, filling NaN values, cleaning text in columns, converting data types, handling missing values, splitting and manipulating columns, and engineering new features.
-
-3. **One-Hot Encoding:**
-    - Utilizes `make_column_transformer` and `OneHotEncoder` to perform one-hot encoding on categorical columns.
-
-4. **Pipeline Creation - `Create_Pipeline`:**
-    - Constructs a pipeline using `FunctionTransformer` and `make_column_transformer`.
-    - The pipeline encapsulates the `Preprocess_Dataset` function and one-hot encoding.
+- scikit-learn
+- xgboost
 
 ##### Instructions
 
 1. **Setup:**
-    - Ensure the necessary libraries (`pandas`, `numpy`, `scikit-learn`) are installed.
+    - Ensure the necessary libraries (requirements.txt) are installed, if not you can install them by using `pip install -r requirements.txt`
     - The code is written in Python.
 
 2. **Execution:**
-    - Load your dataset using `pd.read_excel` or any suitable method and pass it to the `Create_Pipeline` function.
-    - Execute the pipeline using `fit_transform` method on the loaded dataset.
-    - The resulting processed DataFrame can be accessed and saved using appropriate file I/O functions (`to_csv`, etc.).
+    - Load your dataset using and pass it to the `file_path` variable.
+    - Execute the training on the loaded dataset.
+    - See the results and predictions on your training data.
 
 3. **Example:**
     - Below is a sample script to execute the pipeline:
     ```python
-    import pandas as pd
-    from pipeline_script import Create_Pipeline
-
-    if __name__ == '__main__':
-        df = pd.read_excel('path_to_your_dataset.xlsx')  
-        pipeline = Create_Pipeline()
-        finished_df = pipeline.fit_transform(df)
-
-        print(finished_df)  
-        finished_df.to_csv('path_to_save_processed_data.csv')  
+    if __name__ == "__main__":
+        file_path = ''  # Insert the path to the dataset here
+    
+        cols_to_encode = ['REF', 'ALT', 'GENE_SYMBOL', 'TYPE', 'VARIANT_TYPE', 
+                          'MOST_SEVERE_CONSEQUENCE', 'IMPACT', 'EXON_INTRON_TYPE', 'CLINPRED_PRED']
+        cols_to_impute = (['CLINPRED_RANKSCORE', 'POLYPHEN2_HDIV_RANKSCORE',  'SIFT_CONVERTED_RANKSCORE', 
+                          'SIFT4G_CONVERTED_RANKSCORE',  'MUTATIONASSESSOR_RANKSCORE', 'MUTATIONTASTER_CONVERTED_RANKSCORE'],
+                          ['CLINPRED_PRED'])
+        cols_to_scale = ['STRAND', 'VARIANT_OCCURRENCES', 'EXON_INTRON_N', 'DOMAINS_COUNT', 'PUBMED_COUNT']
+    
+        # Random Forest Classifier
+        model_training(file_path, cols_to_encode, cols_to_scale, imputation=True, cols_to_impute=cols_to_impute, verbosity=3)
+    
+        # XGBoost Classifier
+        model_training(file_path, cols_to_encode, cols_to_scale, verbosity=3)
     ```
 
-Replace `'path_to_your_dataset.xlsx'` with the path to your dataset, and `'path_to_save_processed_data.csv'` with the desired path to save the processed data. 
+Replace `'file_path'` with the path to your dataset and see the results for yourself! 
 
 ## Project Participants
 
