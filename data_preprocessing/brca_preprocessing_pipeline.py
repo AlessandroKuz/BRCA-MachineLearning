@@ -2,16 +2,6 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
 
 
-class MapColumn(BaseEstimator, TransformerMixin):
-    def __init__(self, column, mapping):
-        self.column = column
-        self.mapping = mapping
-    def fit(self, X, y=None):
-        return self
-    def transform(self, X):
-        X[self.column] = X[self.column].map(self.mapping)
-        return X
-    
 class DropColumns(BaseEstimator, TransformerMixin): 
     def __init__(self, columns):
         self.columns = columns
@@ -137,7 +127,6 @@ class RenameColumns(BaseEstimator, TransformerMixin):
 
 def brca_preprocessing_pipeline():
     brca_pipeline = Pipeline([
-        ('map_column', MapColumn('LABEL', {'NEG': 0, 'POS': 1, 'VUS': 2})),
         ('fill_na', FillNA('FAMILIARI', 0)),
         ('keep_rows_where_gene_symbol_brca', KeepRowsWhereColumnIsIn('GENE_SYMBOL', ['BRCA1', 'BRCA2'])),
         ('keep_rows_where_familiari', KeepRowsWhereColumnIsIn('FAMILIARI', ['NO'])),
